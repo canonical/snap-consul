@@ -1,0 +1,38 @@
+name: consul
+base: core22
+version: "0.1"
+summary: Snap of service mesh software HashiCorp Consul
+description: |
+  The OpenStack Sunbeam project uses HashiCorp Consul to provide support
+  for OpenStack Masakari. OpenStack Masakari provides automated recovery
+  for OpenStack virtual machine instances in the event of cloud
+  failures. OpenStack Masakari can use HashiCorp Consul to monitor
+  the status of OpenStack host machines
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+parts:
+  consul: # Consul builds using make and not a simple golang build
+    build-packages:
+    - make 
+    build-snaps:
+    - go/latest/stable
+    plugin: nil
+    source-type: git
+    source: https://github.com/hashicorp/consul.git
+    override-build: |
+      set -eux
+
+      cd $CRAFT_PART_SRC
+
+      make
+
+      mkdir -p $CRAFT_PART_INSTALL/usr/local/bin
+      cp ./bin/consul $CRAFT_PART_INSTALL/usr/local/bin/consul
+
+apps:
+  consul:
+    command: usr/local/bin/consul
+    plugs:
+    - home
