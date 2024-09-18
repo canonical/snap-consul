@@ -21,6 +21,7 @@ parts:
     plugin: nil
     source-type: git
     source: https://github.com/hashicorp/consul.git
+    source-tag: "v1.19.2"
     override-build: |
       set -eux
 
