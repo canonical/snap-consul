@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mkdir -p "$SNAP_COMMON/consul/config" || true
+mkdir -p "$SNAP_COMMON/consul/data" || true
+
+# Removing snap will clear the data, should be ok for consul client
+exec "$SNAP/bin/consul" agent -data-dir "$SNAP_COMMON/consul/data" -config-dir "$SNAP_COMMON/consul/config"

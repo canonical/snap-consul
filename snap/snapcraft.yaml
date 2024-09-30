@@ -1,42 +1,47 @@
 name: consul-client
-base: core22
-version: "2024.1"
-summary: Snap for running HashiCorp Consul in client mode for OpenStack Sunbeam
+summary: Consul is a tool for service discovery, monitoring and configuration.
 description: |
-  The OpenStack Sunbeam project uses HashiCorp Consul to provide support
-  for OpenStack Masakari. OpenStack Masakari provides automated recovery
-  for OpenStack virtual machine instances in the event of cloud
-  failures. OpenStack Masakari can use HashiCorp Consul to monitor
-  the status of OpenStack hypervisor hosts. This snap provides Consul
-  for use in client mode.
+  Consul is a distributed, highly available, and data center aware solution to
+  connect and configure applications across dynamic, distributed infrastructure.
+base: core24
+version: "1.19.2"
+license: BUSL-1.1
 
 grade: devel # still needing to develop this snap further
 confinement: strict
 
+apps:
+  consul-client:
+    command: bin/consul
+  consul:
+    daemon: simple
+    command: commands/consul-wrapper
+    install-mode: disable
+    restart-condition: on-failure
+    plugs:
+      - network
+      - network-bind
+
 parts:
-  consul: # Consul builds using make and not a simple golang build
-    build-packages:
-    - make 
+  consul:
     build-snaps:
-    - go/latest/stable
-    plugin: nil
+      - go/latest/stable
+    plugin: make
     source-type: git
     source: https://github.com/hashicorp/consul.git
     source-tag: "v1.19.2"
     override-build: |
       set -eux
-
       cd $CRAFT_PART_SRC
-
       make
-
-      cp ./bin/consul $CRAFT_PART_INSTALL/consul
+      strip bin/consul
+      mkdir -p $CRAFT_PART_INSTALL/bin
+      cp ./bin/consul $CRAFT_PART_INSTALL/bin/consul
     stage:
-    - consul
+      - bin/consul
 
-apps:
-  consul-client: # consul needs to be able to bind to a listening port
-    command: consul
-    plugs:
-    - network
-    - network-bind
+  wrappers:
+    plugin: dump
+    source: snap-wrappers/
+    organize:
+      "*": commands/
