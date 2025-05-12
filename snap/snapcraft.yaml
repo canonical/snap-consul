@@ -45,3 +45,9 @@ parts:
     source: snap-wrappers/
     organize:
       "*": commands/
+
+plugs:
+  consul-socket:
+    interface: content
+    content: consul-unix-sock
+    target: $SNAP_DATA
