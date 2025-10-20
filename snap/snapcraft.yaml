@@ -13,6 +13,8 @@ confinement: strict
 apps:
   consul-client:
     command: bin/consul
+    plugs:
+      - network
   consul:
     daemon: simple
     command: commands/consul-wrapper
