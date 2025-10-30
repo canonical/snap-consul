@@ -10,6 +10,10 @@ license: BUSL-1.1
 grade: devel # still needing to develop this snap further
 confinement: strict
 
+platforms:
+  amd64:
+  arm64:
+
 apps:
   consul-client:
     command: bin/consul
