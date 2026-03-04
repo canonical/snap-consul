@@ -7,7 +7,7 @@ base: core24
 version: "1.19.2"
 license: BUSL-1.1
 
-grade: devel # still needing to develop this snap further
+grade: stable
 confinement: strict
 
 platforms:
