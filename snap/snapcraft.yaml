@@ -13,6 +13,7 @@ confinement: strict
 platforms:
   amd64:
   arm64:
+  s390x:
 
 apps:
   consul-client:
