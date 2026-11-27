@@ -3,7 +3,7 @@ summary: Consul is a tool for service discovery, monitoring and configuration.
 description: |
   Consul is a distributed, highly available, and data center aware solution to
   connect and configure applications across dynamic, distributed infrastructure.
-base: core24
+base: core26
 version: "1.19.2"
 license: BUSL-1.1
 
@@ -46,6 +46,12 @@ parts:
       cp ./bin/consul $CRAFT_PART_INSTALL/bin/consul
     stage:
       - bin/consul
+
+  python-runtime:
+    plugin: nil
+    # The consul-client charm invokes python3 for its TCP health check.
+    stage-packages:
+      - python3
 
   wrappers:
     plugin: dump
